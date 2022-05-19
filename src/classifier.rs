@@ -17,7 +17,7 @@ struct Counter {
 }
 
 /// A bayesian spam classifier.
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Clone, Default, Debug, Serialize, Deserialize)]
 pub struct Classifier {
     token_table: HashMap<String, Counter>,
 }
