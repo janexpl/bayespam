@@ -10,16 +10,22 @@ const DEFAULT_FILE_PATH: &str = "model.json";
 const INITIAL_RATING: f32 = 0.5;
 const SPAM_PROB_THRESHOLD: f32 = 0.8;
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize, Clone)]
 struct Counter {
     ham: u32,
     spam: u32,
 }
 
 /// A bayesian spam classifier.
-#[derive(Clone, Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Classifier {
     token_table: HashMap<String, Counter>,
+}
+
+impl Clone for Classifier {
+    fn clone(&self) -> Self {
+        Self { token_table: self.token_table.clone() }
+    }
 }
 
 impl Classifier {
