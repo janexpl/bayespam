@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io;
+use std::{collections::HashMap, io::BufReader};
 
 use serde::{Deserialize, Serialize};
 use serde_json::{from_reader, to_writer, to_writer_pretty};
@@ -24,7 +24,9 @@ pub struct Classifier {
 
 impl Clone for Classifier {
     fn clone(&self) -> Self {
-        Self { token_table: self.token_table.clone() }
+        Self {
+            token_table: self.token_table.clone(),
+        }
     }
 }
 
@@ -36,7 +38,8 @@ impl Classifier {
 
     /// Build a new classifier with a pre-trained model loaded from `file`.
     pub fn new_from_pre_trained(file: &mut File) -> Result<Self, io::Error> {
-        let pre_trained_model = from_reader(file)?;
+        let reader = BufReader::new(file.try_clone()?);
+        let pre_trained_model = from_reader(reader)?;
         Ok(pre_trained_model)
     }
 
